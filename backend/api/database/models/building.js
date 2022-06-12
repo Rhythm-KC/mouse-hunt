@@ -1,24 +1,30 @@
 const mongoose = require('mongoose');
 
-const buildingScheme= new mongoose.Schema({
-    buildingName: {
+const buildingScheme= mongoose.Schema({
+    BuildingName: {
         type: String,
         required:true,
     },
-    buildingNo:{
-        type:Number,
-        required:true 
+    Mnemonic:{
+        type:String,
+        max:3,
+        required:true,
     },
-    totalFloors:{
+    BuildingID:{
+        type:String,
+        required:true, 
+        max:4,
+        min:2
+    },
+    TotalFloors:{
         type:Number,
         required: true
     },
-    rooms:{
-        type:[mongoose.Types.ObjectId],
-        required:true
+    floors:{
+        type:Number,
+        default:0
     }
 
 })
 
-const Building = mongoose.model("Building", buildingScheme);
-modoule.export= Building; 
+module.exports = mongoose.model("Building", buildingScheme)
