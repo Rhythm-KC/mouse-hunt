@@ -105,3 +105,4 @@ dist
 
 #files
 backend/data
+ui/mouse-hunt/.vscode
