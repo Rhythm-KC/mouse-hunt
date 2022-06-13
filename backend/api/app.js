@@ -33,7 +33,10 @@ app.get('/floors/:buildingID', (req,res)=>{
     const buildingcode = req.params.buildingID
     Building.find({BuildingID:buildingcode},"_id")
     .then(building_id=>{
-        console.log(typeof(building_id))
+        if(building_id == null){
+            res.sendStatus(404)
+            return
+        }
         Floor.find({Building_ID:building_id})
         .then(listoffloors=>{
             
@@ -76,5 +79,47 @@ app.get('/rooms/:buildingID/:level',(req,res)=>{
     .catch(error=> {console.log(error)})
 })
 
+//create a new checklist and log it in
+app.post('/checklist/:buildingID/:level/:room', (req,res)=>{
+    Building.find({BuildingID:req.params.buildingID})
+    .then(building=>{
+        if (building == null){
+            res.sendStatus(404)
+            return
+        }
+        Floor.find({Building_ID:building['_id'], Level:Number(req.params.level)}).then(
+            floor=>{
+                if (floor == null){
+                    res.sendStatus(404)
+                    return
+                }
+                Room.findOne({Floor_id:floor['_id'], RoomNo:Number(req.params.room)})
+                .then(room=>{
+                    if(room == null){
+                        res.sendStatus(404)
+                    }
+                    new Checklist(req.body).save()
+                    .then(checklist=>{
+                        Room.updateOne({_id:room["_id"]},{$push:{
+                          CheckList: checklist["_id"]
+                        }})
+                        .then(res.send(checklist))
+                    })
+                })
+            }
+        )
+    })
+    .catch(error=>{
+        console.log(error)
+    })
+})
+
+app.get("/checklists",(req,res)=>{
+    Checklist.find({})
+    .then(listofChecklist=>{
+        
+        res.send(listofChecklist);
+    })
+})
 
 app.listen(3000)

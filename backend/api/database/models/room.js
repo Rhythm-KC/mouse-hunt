@@ -1,16 +1,25 @@
 const mongoose = require('mongoose');
 
-const checkListSchema= mongoose.Schema({
-    noOfTraps:{
+const checkListSchema= new mongoose.Schema({
+    Date:{
+        type:Date,
+        default:Date.now()
+    },
+    TrapsInstalled:{
         type:Number,
         default:0
     },
-    trapsChecked:{
+    TrapChecked:{
         type:Map,
         of:Boolean,
         default:false
     },
-    mouseFound:{
+    MouseFound:{
+        type:Map,
+        of:Boolean,
+        default:false
+    },
+    NeedsReplaced:{
         type:Map,
         of:Boolean,
         default:false
@@ -26,9 +35,9 @@ const roomSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     },
-    data:{
-        type:Map,
-        of:checkListSchema
+    CheckList:{
+        type: Array,
+        required: true
     }
 })
 
