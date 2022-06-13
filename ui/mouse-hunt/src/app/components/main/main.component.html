@@ -1,0 +1,8 @@
+<div *ngFor="let building of buildings" class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <span>{{building.BuildingID}} | {{building.Mnemonic}} | {{building.BuildingName}} </span>
+</div>
+<div class="collapse" id="collapseExample">
+  <div class = 'container' *ngfor = "let floor of building.floors">
+    <span>Floor: {{floor}}</span>
+  </div>
+</div>
