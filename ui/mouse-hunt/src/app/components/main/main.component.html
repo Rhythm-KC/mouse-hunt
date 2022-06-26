@@ -1,8 +1,16 @@
-<div *ngFor="let building of buildings" class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-    <span>{{building.BuildingID}} | {{building.Mnemonic}} | {{building.BuildingName}} </span>
-</div>
-<div class="collapse" id="collapseExample">
-  <div class = 'container' *ngfor = "let floor of building.floors">
-    <span>Floor: {{floor}}</span>
+<div class="accordion" id="accordionExample">
+  <div *ngFor="let building of buildings" class="accordion-item">
+    <h2 class="accordion-header" id="heading{{building.BuildingID}}">
+      <button class="accordion-button collapsed" (click)="getFloors(building.BuildingID)" type="button" data-bs-toggle="collapse" [attr.data-bs-target]="'#collapseOne' + building.BuildingID" aria-expanded="true" [attr.aria-controls]="'collapseOne' + building.BuildingID">
+        <span>{{building.BuildingID}} | {{building.BuildingName}} | {{building.Mnemonic}}</span>
+      </button>
+    </h2>
+    <div>
+    <div id="collapseOne{{building.BuildingID}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body d-grid gap-2">
+        <button *ngFor="let floor of listOffloors" routerLink="/building/{{building.BuildingID}}/floor/{{floor.Level}}" type="button" class="btn btn-info">{{floor.Level}}</button>
+      </div>
+    </div>
+    </div>
   </div>
 </div>

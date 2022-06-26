@@ -1,7 +1,7 @@
 const express = require('express');
+const mongoose = require('./database/mongoose')
 const app = express()
-const mongoose = require("./database/mongoose")
-const {Room, Floor, Checklist} = require("./database/models/room")
+const {floor,room, Checklist} = require("./database/models/room")
 const Building= require("./database/models/building");
 
 app.use(express.json());
@@ -20,7 +20,6 @@ app.get('/buildings',(req,res)=>{
             res.statusCode(404)
             return
         }
-        console.log(listofBuildings)
         res.send(listofBuildings)
     })
     .catch(error=>{
@@ -28,18 +27,42 @@ app.get('/buildings',(req,res)=>{
     })
 })
 
-//get all floors from a particular building
 app.get('/floors/:buildingID', (req,res)=>{
+    const buildingCode = req.params.buildingID
+    Building.findOne({BuildingID:buildingCode},'_id')
+    .then(id=>{
+        if (id == null){
+            res.sendStatus(404)
+            return
+        }
+        floor.find({Building_ID:id})
+        .then(floors=>{
+            if (floors.length ==0){
+                res.sendStatus(404)
+                return
+            }
+            res.send(floors)
+        })
+
+    })
+})
+
+//get all floors from a particular building
+app.get('/floor/:buildingID/:level', (req,res)=>{
     const buildingcode = req.params.buildingID
-    Building.find({BuildingID:buildingcode},"_id")
+    const level = req.params.level
+    Building.findOne({BuildingID:buildingcode},"_id")
     .then(building_id=>{
         if(building_id == null){
             res.sendStatus(404)
             return
         }
-        Floor.find({Building_ID:building_id})
+        floor.findOne({Building_ID:building_id, Level:level})
         .then(listoffloors=>{
-            
+            if(listoffloors == null){
+                res.sendStatus(404)
+                return
+            }
             res.send(listoffloors)
         })
         .catch(error=>{
@@ -48,6 +71,33 @@ app.get('/floors/:buildingID', (req,res)=>{
     })
     .catch(error=>{
         console.log(error)
+    })
+})
+
+
+app.post("/createBuilding",(req,res) =>{
+    console.log(req.body)
+    new Building(req.body).save().then(()=>{res.sendStatus(200)})
+})
+
+app.post("/addFloors/:bID",(req,res)=>{
+    Building.findOne({BuildingID: req.params.bID})
+    .then(building=>{
+        if (building == null){
+            res.sendStatus(404)
+        }else{
+            body = req.body
+            body['Building_ID'] = building['_id']
+            floor.find({Building_ID: building["_id"]})
+            .then(floors =>{
+                if (floors.length < building['TotalFloors'] ){
+                    new floor(body).save().then(res.sendStatus(200))
+                }else{
+                    res.send(404)
+                }
+            
+            })
+        }
     })
 })
 
@@ -61,11 +111,10 @@ app.get('/rooms/:buildingID/:level',(req,res)=>{
             res.sendStatus(404)
             return
         }
-        Floor.findOne({Building_ID:building_id,Level:level})
+        floor.findOne({Building_ID:building_id,Level:level})
         .then(currentfloor=>{
             if (currentfloor != null){
-                Room.find({Floor_ID:currentfloor})
-                console.log()
+                room.find({Floor_ID:currentfloor['_id']})
                 .then(listofRooms=>{
                 res.send(listofRooms)
                 })
@@ -79,40 +128,69 @@ app.get('/rooms/:buildingID/:level',(req,res)=>{
     .catch(error=> {console.log(error)})
 })
 
-//create a new checklist and log it in
-app.post('/checklist/:buildingID/:level/:room', (req,res)=>{
-    Building.find({BuildingID:req.params.buildingID})
-    .then(building=>{
-        if (building == null){
+app.post("/addRooms/:bid/:level",(req,res)=>{
+    body =req.body
+    console.log(body)
+    Building.findOne({BuildingID: req.params.bid},"_id")
+    .then((B_id)=>{
+        if(B_id == null){
             res.sendStatus(404)
             return
         }
-        Floor.find({Building_ID:building['_id'], Level:Number(req.params.level)}).then(
-            floor=>{
-                if (floor == null){
-                    res.sendStatus(404)
-                    return
-                }
-                Room.findOne({Floor_id:floor['_id'], RoomNo:Number(req.params.room)})
-                .then(room=>{
-                    if(room == null){
-                        res.sendStatus(404)
-                    }
-                    new Checklist(req.body).save()
-                    .then(checklist=>{
-                        Room.updateOne({_id:room["_id"]},{$push:{
-                          CheckList: checklist["_id"]
-                        }})
-                        .then(res.send(checklist))
-                    })
-                })
+        floor.findOne({Building_ID: B_id, Level:req.params.level})
+        .then(Cfloor=>{
+            if(Cfloor == null){
+                res.sendSend(404)
+                return
             }
-        )
+            room.find({Floor_ID:Cfloor["_id"]})
+            .then(
+                rooms =>{
+                    if(rooms.length > Cfloor["FloorCapicity"]){
+                        res.sendStatus(404)
+                        return
+                    }
+                    body["Floor_ID"] = Cfloor["_id"]
+                    console.log(body)
+                    new room(body
+                    ).save()
+                    .then(res.sendStatus(200))
+                }
+            )
+        })
     })
-    .catch(error=>{
-        console.log(error)
+    .catch(err=>console.log(err))
+
+    
+
+})
+
+//create a new checklist and log it in
+app.post('/checklist/:buildingID/room', (req,res)=>{
+    var Croom = req.body["room"];
+    Croom["Floor_ID"] = new mongoose.Types.ObjectId(Croom["Floor_ID"])
+    var checklist = req.body["mice"]
+
+    room.findOneAndUpdate({Floor_ID:Croom["Floor_ID"],RoomNo:Number(Croom["RoomNo"])},
+    {$set:{TrapsInstalled:Number(Croom["TrapsInstalled"]),Done:true, NeedsRepalced:Number(Croom["NeedsReplaced"]),TrapsChecked:Croom["TrapsChecked"]}
+    })
+    .then((newRoom)=>{
+        console.log(newRoom)
+        if(newRoom == null){
+            res.sendStatus(404)
+            return
+        }
+        new Checklist({Room_ID:newRoom["_id"], Date:Date.now(),MouseFound:checklist})
+        .save()
+        .then(()=>{room.find({Floor_ID:newRoom["Floor_ID"]})
+            .then(listofRooms=>{
+                res.send(listofRooms)
+                console.log(listofRooms)
+            })
+        })
     })
 })
+
 
 app.get("/checklists",(req,res)=>{
     Checklist.find({})

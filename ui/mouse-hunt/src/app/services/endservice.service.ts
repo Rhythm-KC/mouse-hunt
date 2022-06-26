@@ -1,31 +1,54 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from '@angular/common/http'
-import { catchError, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { catchError, Observable, of, tap } from 'rxjs';
 
-import{Building} from "../building"
+import{Building} from "../models/building"
+import { floors } from '../models/floors';
+import { checklist } from '../models/checklist';
+import { room } from '../models/rooms';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EndserviceService {
-  url = ''
+  private url = 'http://localhost:3000'
   constructor(private http:HttpClient) { }
 
   getAllBuilding():Observable<Building[]>{
-    return this.http.get<Building[]>(this.url).pipe(
-      catchError(this.handleError<Building[]>('get all buildings'))
+    const buildingurl = `${this.url}/buildings`
+    return this.http.get<Building[]>(buildingurl).pipe(
+      tap(()=> EndserviceService.log('Getting course')),
+      catchError(this.handleError<Building[]>('could not buildings'))
     )
   }
 
-  
+  getRooms(buildingID:string|null, level:string|null):Observable<room[]>{
+      const floorurl = `${this.url}/rooms/${buildingID}/${level}`
+      return this.http.get<room[]>(floorurl).pipe(
+        tap((floor)=> EndserviceService.log('got floors')),
+        catchError(this.handleError<room[]>('could not get floor'))
+      )
+  }
 
+  getFloors(buildingID:string|null):Observable<floors[]>{
+    const floorsUrl = `${this.url}/floors/${buildingID}`
+    return this.http.get<floors[]>(floorsUrl).pipe(
+      tap(_=> console.log('Got floors')),
+      catchError(this.handleError<floors[]>('could not get floors'))
+    )
+  }
 
-
-
-
-
-
-
+  postChecklist(buildingID:string|null,room:room,mouseFound:number):Observable<room[]>{
+    const checklisturl = `${this.url}/checklist/${buildingID}/room`
+    let data={
+      room:room,
+      mice:mouseFound
+    }
+    return this.http.post<room[]>(checklisturl,data).pipe(
+      tap(_=>(console.log("submited room"))),
+      catchError(this.handleError<room[]>("room info was not submitted"))
+    )
+  }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

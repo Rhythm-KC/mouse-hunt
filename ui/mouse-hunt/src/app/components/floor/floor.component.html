@@ -1,0 +1,49 @@
+
+<div class="accordion" id="accordionExample">
+  <div *ngFor="let room of listOFrooms" class="accordion-item">
+    <h2 class="accordion-header" id="headingOne">
+      <button  class="d-flex accordion-button collapsed " type="button" [disabled]="room.Done" data-bs-toggle="collapse" [attr.data-bs-target] = "'#collapse'+room.RoomNo" aria-expanded="true" aria-controls="collapseOne">
+          Room No: {{room.RoomNo}}
+          <svg *ngIf="room.Done" style="margine-left:50%;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill text-success" viewBox="0 0 16 16">
+           <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+          </svg>
+      </button>
+    </h2>
+    <div id="collapse{{room.RoomNo}}" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+      <div class="accordion-body">
+        <ul class="list-group mx-auto">
+          <li class="list-group-item">
+            <label>Traps Installed: </label>
+            <select class="mx-3"[ngModel]="room.TrapsInstalled">
+              <option selected> {{room.TrapsInstalled}}</option>
+              <option *ngFor="let val of options">{{val}}</option>
+            </select>
+          </li>
+          <li class="list-group-item">
+            <label class="mx-auto">Traps Checked: </label>
+            <input class="ms-3" type="checkbox" [attr.value]="room.TrapsChecked" [ngModel]="room.TrapsChecked">
+          </li>
+          <li class="list-group-item ">
+            <label>Traps need to be replaced: </label>
+            <select class="mx-3" [ngModel]="room.NeedsReplaced">
+              <option selected> {{room.TrapsInstalled}}</option>
+              <option *ngFor="let val of options">{{val}}</option>
+            </select>
+          </li>
+          <li class="list-group-item">
+            <label>Mouse Found: </label>
+            <select class="mx-3" [ngModel]="mouseFound">
+              <option selected>0</option>
+              <option *ngFor="let val of options">{{val}}</option>
+            </select>
+        </ul>
+        <div class="d-grid gap-2 md-block">
+          <button class="btn btn-outline-success {{room.RoomNo}}"    (click)="submit(room)" type="button">{{submitString}}
+            <div [hidden] = "!loading" class="spinner-grow spinner-grow-sm" role="status">
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

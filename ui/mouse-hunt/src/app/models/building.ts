@@ -4,5 +4,6 @@ export interface Building{
     Mnemonic:string
     BuildingID:string
     TotalFloors:number
-    floors:[number]
+    Floors:[]
 }
+

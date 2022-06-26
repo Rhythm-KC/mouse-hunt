@@ -1,67 +1,71 @@
 const mongoose = require('mongoose');
+const { schema } = require('./building');
 
 const checkListSchema= new mongoose.Schema({
+    Room_ID:{
+        type: mongoose.Types.ObjectId,
+        required:true
+    },
     Date:{
         type:Date,
-        default:Date.now()
-    },
-    TrapsInstalled:{
-        type:Number,
-        default:0
-    },
-    TrapChecked:{
-        type:Map,
-        of:Boolean,
-        default:false
+        default:Date()
     },
     MouseFound:{
-        type:Map,
-        of:Boolean,
-        default:false
+        type:Number,
+        required:true,
     },
-    NeedsReplaced:{
-        type:Map,
-        of:Boolean,
+})
+
+const floorScheme = new mongoose.Schema({
+    Building_ID: {
+        type: mongoose.Types.ObjectId,
+        required:true
+    },
+    Level:{
+        type:Number,
+        required:true
+    },
+    FloorCapicity:{
+        type :Number,
+        required:true
+    },
+    Done:{
+        type:Boolean,
         default:false
     }
 })
 
 const roomSchema = new mongoose.Schema({
+    Floor_ID :{
+        type:mongoose.Types.ObjectId,
+        required:true
+    },
     RoomNo: {
         type: Number,
         required:true,
     },
-    Floor_ID:{
-        type: mongoose.Types.ObjectId,
-        required: true
-    },
-    CheckList:{
-        type: Array,
-        required: true
-    }
-})
-
-const floorSchema = new mongoose.Schema({
-
-    Building_ID:{
-        type: mongoose.Types.ObjectId,
-        required:true,
-    },
-    Level:{
+    TrapsInstalled:{
         type:Number,
         required:true,
+        max:2,
+        default:0
     },
-    TotalRooms:{
-        type:Number,
-        required: true
+    TrapsChecked:{
+        type:Boolean,
+        default:false,
     },
-    rooms:{
+    NeedsReplaced:{
         type:Number,
         default:0
+    },
+    Done:{
+        type:Boolean,
+        default:false
     }
+    
 })
 
-const Room = mongoose.model("Room", roomSchema);
-const Floor = mongoose.model("Floor", floorSchema);
+const room = mongoose.model("Room", roomSchema)
 const Checklist = mongoose.model("CheckList", checkListSchema)
-module.exports= {Room,Floor,Checklist}; 
+const floor = mongoose.model("Floor", floorScheme)
+module.exports= {floor,room,Checklist}; 

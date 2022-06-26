@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { EndserviceService } from 'src/app/services/endservice.service';
-import { Building } from 'src/app/building';
+import { Building } from 'src/app/models/building';
+import { floors } from 'src/app/models/floors';
 
 @Component({
   selector: 'app-main',
@@ -8,14 +9,23 @@ import { Building } from 'src/app/building';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
-  buildings: Building[] = [];
-  constructor(private service:EndserviceService) { }
+  buildings!: Building[];
+  listOffloors!:floors[]
+  constructor(private service:EndserviceService) {
+  }
 
   ngOnInit(): void {
-    this.getBuildings
+    this.getBuildings()
   }
-   
+
   getBuildings(): void {
-    this.service.getAllBuilding().subscribe((buildings) => this.buildings = buildings)
+    this.service.getAllBuilding().subscribe((buildings) => {this.buildings = buildings
+    })
+  }
+  getFloors(Bid:string):void{
+    this.service.getFloors(Bid).subscribe((floors)=>{
+      this.listOffloors = floors
+
+    })
   }
 }
