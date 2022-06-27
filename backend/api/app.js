@@ -190,8 +190,92 @@ app.post('/checklist/:buildingID/room', (req,res)=>{
         })
     })
 })
+app.get("/dashboard", (req,res)=>{
+    room.aggregate([
+        {
+            $lookup:{
+                from:"checklists",
+                localField:"_id",
+                foreignField:"Room_ID",
+                as:"checklist"
+                
+            }
+        },
+        {
+            $addFields:{
+                MiceChecklistSum:{$sum:"$checklist.MouseFound"}
+            }
+        },
+        {$group:{
+            _id:null,
+            totalTrapsNeeded:{$sum:"$NeedsReplaced"},
+            totalMiceSum:{$sum:"$MiceChecklistSum"}
+        }
+        }
+        
+    ])
+    .then(
+        (dash)=>{
+            res.send(dash)
+        }
+    )
+})
 
+app.get("/table/:building", (req,res)=>{
+    Building.aggregate([
+        {$match:{'BuildingID':req.params.building}},
+        {$lookup:{
+            from:"floors",
+            localField:"_id",
+            foreignField:"Building_ID",
+            as: "Floor" 
+        }},
+        {$unwind: '$Floor'},
+        {
+            $lookup:{
+                from: 'rooms',
+                localField: "Floor._id",
+                foreignField: "Floor_ID",
+                as: "Floor.rooms"
+            }
+    
+        },
+        {
+            $unwind:"$Floor.rooms"
+        },
+        {
+            $lookup:{
+                from:"checklists",
+                localField:'Floor.rooms._id',
+                foreignField:"Room_ID",
+                as:"Floor.rooms.Micecount"
+            }
+        },
+        {
+            $project:{
+                'BuildingID':1,
+                "BuildingName":1,
+                "Mnemonics":1,
+                "Floor.rooms._id":1,
+                "Floor.rooms.RoomNo":1,
+                "Floor.rooms.TrapsInstalled":1,
+                "Floor.rooms.NeedsReplaced":1,
+                "totalMice":{$sum:"$Floor.rooms.Micecount.MouseFound"}
 
+            }
+
+        }
+
+    ])
+    .then(newVal=>{
+        if(newVal.length == 0){
+            res.send(404)
+            return
+        }
+        res.send(newVal)
+    })
+    .catch(res.sendStatus(500))
+})
 app.get("/checklists",(req,res)=>{
     Checklist.find({})
     .then(listofChecklist=>{
