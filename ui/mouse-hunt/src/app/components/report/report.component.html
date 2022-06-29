@@ -1,1 +1,45 @@
-<p>report works!</p>
+<div class="container-fluid">
+  <div class="row row-col-2 mt-2">
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">
+            Total Mouse Found
+          </div>
+          <div class="card-text float-right">
+            {{dash.totalMiceSum}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">
+            Traps Need to be Replaced
+          </div>
+          <div class="card-text float-right">
+            {{dash.totalTrapsNeeded}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div calss="row mt-4 row-col-1">
+    <div class="col">
+        <table class="table">
+         <thead>
+           <tr>
+            <th scope="col">Building ID</th>
+            <th scope="col">Building Name</th>
+            <th scope="col">Room No</th>
+            <th scope="col">Mouse Found</th>
+            <th scope="col">Traps Installed</th>
+
+          </tr>
+         </thead>
+        </table>
+    </div>
+  </div>
+
+</div>

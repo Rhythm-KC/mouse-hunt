@@ -6,6 +6,8 @@ import{Building} from "../models/building"
 import { floors } from '../models/floors';
 import { checklist } from '../models/checklist';
 import { room } from '../models/rooms';
+import { Dashboard } from '../models/Dashboard';
+import { Table } from '../models/Table';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +49,22 @@ export class EndserviceService {
     return this.http.post<room[]>(checklisturl,data).pipe(
       tap(_=>(console.log("submited room"))),
       catchError(this.handleError<room[]>("room info was not submitted"))
+    )
+  }
+
+  getDash():Observable<Dashboard>{
+    const dashurl = `${this.url}/dashboard`
+    return this.http.get<Dashboard>(dashurl).pipe(
+      tap(_=>"got dash"),
+      catchError(this.handleError<Dashboard>('could not get dash'))
+    )
+  }
+
+  getTable(buildingID:string):Observable<Table[]>{
+    const tableurl = `${this.url}/table/${buildingID}`
+    return this.http.get<Table[]>(tableurl).pipe(
+      tap(_=> console.log('got table')),
+      catchError(this.handleError<Table[]>('cannot find table'))
     )
   }
 
