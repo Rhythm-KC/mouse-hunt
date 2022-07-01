@@ -7,7 +7,7 @@ const getBuildings = asyncHandler( async (req,res)=>{
     const buildings = await Building.find()
     //console.log(buildings)
     res.status(404)
-    //res.json(json.toString(buildings))
+    res.json(json.toString(buildings))
 })
 
 
