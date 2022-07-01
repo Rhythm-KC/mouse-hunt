@@ -20,10 +20,7 @@ app.get('/buildings',(req,res)=>{
             res.statusCode(404)
             return
         }
-        else{
         res.send(listofBuildings)
-
-        }
     })
     .catch(error=>{
         res.send(500)
@@ -256,15 +253,14 @@ app.get("/table/:building", (req,res)=>{
         },
         {
             $project:{
-                "_id":0,
                 'BuildingID':1,
                 "BuildingName":1,
-                "Mnemonic":1,
+                "Mnemonics":1,
                 "Floor.rooms._id":1,
                 "Floor.rooms.RoomNo":1,
                 "Floor.rooms.TrapsInstalled":1,
                 "Floor.rooms.NeedsReplaced":1,
-                "Floor.rooms.totalMice":{$sum:"$Floor.rooms.Micecount.MouseFound"}
+                "totalMice":{$sum:"$Floor.rooms.Micecount.MouseFound"}
 
             }
 
@@ -273,16 +269,12 @@ app.get("/table/:building", (req,res)=>{
     ])
     .then(newVal=>{
         if(newVal.length == 0){
-            res.sendStatus(404)
+            res.send(404)
+            return
         }
-        else{
-            res.send(newVal)
-        }
+        res.send(newVal)
     })
-    .catch(error=>{
-        console.log(error)
-        res.sendStatus(500)
-    })
+    .catch(res.sendStatus(500))
 })
 app.get("/checklists",(req,res)=>{
     Checklist.find({})

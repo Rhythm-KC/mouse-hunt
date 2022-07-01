@@ -52,11 +52,11 @@ export class EndserviceService {
     )
   }
 
-  getDash():Observable<Dashboard[]>{
+  getDash():Observable<Dashboard>{
     const dashurl = `${this.url}/dashboard`
-    return this.http.get<Dashboard[]>(dashurl).pipe(
+    return this.http.get<Dashboard>(dashurl).pipe(
       tap(_=>"got dash"),
-      catchError(this.handleError<Dashboard[]>('could not get dash'))
+      catchError(this.handleError<Dashboard>('could not get dash'))
     )
   }
 

@@ -2,83 +2,44 @@
   <div class="row row-col-2 mt-2">
     <div class="col">
       <div class="card">
-        <div class="card-body d-flex">
+        <div class="card-body">
           <div class="card-title">
-            <h6>Total Mouse Found:</h6>
+            Total Mouse Found
           </div>
-          <div class="card-text d-flex justify-content-end ">
-            <h4 class="mt-auto">{{dash.totalMiceSum}}</h4>
+          <div class="card-text float-right">
+            {{dash.totalMiceSum}}
           </div>
         </div>
       </div>
     </div>
     <div class="col">
       <div class="card">
-        <div class="card-body d-flex">
+        <div class="card-body">
           <div class="card-title">
-            <h6>Total Traps to be replaced:</h6>
+            Traps Need to be Replaced
           </div>
-          <div class="card-text d-flex justify-content-end">
-            <h4 class="mt-auto">{{dash.totalTrapsNeeded}}</h4>
+          <div class="card-text float-right">
+            {{dash.totalTrapsNeeded}}
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div calss="row h-100 row-col-1">
+  <div calss="row mt-4 row-col-1">
     <div class="col">
-      <div class="card mt-3 h-100">
-        <div class="card-title d-flex p-2 m-0 ">
-          <div class="dropdown ">
-            <button class="btn btn-outline-secondary" style="white-space:nowrap; width:100px;height: 40px; text-overflow: ellipsis; overflow: hidden;"  role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              {{currentBuilding}}
-            </button>
+        <table class="table">
+         <thead>
+           <tr>
+            <th scope="col">Building ID</th>
+            <th scope="col">Building Name</th>
+            <th scope="col">Room No</th>
+            <th scope="col">Mouse Found</th>
+            <th scope="col">Traps Installed</th>
 
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="height: 200px; overflow:scroll">
-              <li *ngFor="let building of buildings"><a class="dropdown-item" (click)="getTable(building.BuildingID)">{{building.BuildingName}}</a>
-              </li>
-            </ul>
-          </div>
-          <div class="dropdown ms-auto">
-            <button class="btn btn-light filter" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown"
-              aria-expanded="false">
-            </button>
-
-            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-              <li *ngFor="let filter of filters"><a class="dropdown-item" (click)="applyFilter(filter)">{{filter}}</a>
-              </li>
-            </ul>
-          </div>
-        </div>
-          <div class="card-body">
-            <div class="card-text" style="overflow:scroll; height: 600px;">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Building ID</th>
-                    <th scope="col">Building Name</th>
-                    <th scope="col">Room No</th>
-                    <th scope="col">Mouse Found</th>
-                    <th scope="col">Traps Installed</th>
-                    <th scope="col">Replace Traps</th>
-
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let row of table">
-                    <td>{{row.BuildingID}}</td>
-                    <td>{{row.BuildingName}}</td>
-                    <td>{{row.Floor.rooms.RoomNo}}</td>
-                    <td>{{row.Floor.rooms.totalMice}}</td>
-                    <td>{{row.Floor.rooms.TrapsInstalled}}</td>
-                    <td>{{row.Floor.rooms.NeedsReplaced}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-      </div>
+          </tr>
+         </thead>
+        </table>
     </div>
-
   </div>
+
+</div>
