@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const buildingScheme= new mongoose.Schema({
+const buildingScheme = mongoose.Schema({
     BuildingID:{
         type:String,
         required:true, 
@@ -26,6 +26,5 @@ const buildingScheme= new mongoose.Schema({
     }
 
 })
-
-const Building = mongoose.model("Building", buildingScheme)
-module.exports = Building
+ 
+module.exports= mongoose.model("Building", buildingScheme)
