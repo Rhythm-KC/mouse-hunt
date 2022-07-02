@@ -36,8 +36,8 @@ const getDash = asyncHandler(async (req,res)=>{
 const getTable= asyncHandler(async (req,res)=>{
     var id = req.params.id
     if(id == undefined) {
-        const firstID = await Building.findOne()
-        id = firstID["BuildingID"]
+        id = await Building.findOne({},{_id:0,BuildingID:1})
+        id = id["BuildingID"]
     }
     const table = await Building.aggregate([
        {$match:{'BuildingID':id}},

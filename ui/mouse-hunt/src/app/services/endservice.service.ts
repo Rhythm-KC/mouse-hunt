@@ -4,7 +4,6 @@ import { catchError, Observable, of, tap } from 'rxjs';
 
 import{Building} from "../models/building"
 import { floors } from '../models/floors';
-import { checklist } from '../models/checklist';
 import { room } from '../models/rooms';
 import { Dashboard } from '../models/Dashboard';
 import { Table } from '../models/Table';
@@ -53,15 +52,18 @@ export class EndserviceService {
   }
 
   getDash():Observable<Dashboard>{
-    const dashurl = `${this.url}/dashboard`
+    const dashurl = `${this.url}/analytics/dashboard`
     return this.http.get<Dashboard>(dashurl).pipe(
       tap(_=>"got dash"),
       catchError(this.handleError<Dashboard>('could not get dash'))
     )
   }
 
-  getTable(buildingID:string):Observable<Table[]>{
-    const tableurl = `${this.url}/table/${buildingID}`
+  getTable(buildingID:string|null):Observable<Table[]>{
+    var tableurl = `${this.url}/analytics/table`
+    if(buildingID != null){
+      tableurl = `${tableurl}/${buildingID}`
+    }
     return this.http.get<Table[]>(tableurl).pipe(
       tap(_=> console.log('got table')),
       catchError(this.handleError<Table[]>('cannot find table'))
