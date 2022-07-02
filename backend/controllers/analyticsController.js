@@ -30,7 +30,7 @@ const getDash = asyncHandler(async (req,res)=>{
         res.status(500)
         throw new Error("Dashboard Data couldnot be found")
     }
-    res.status(200).json(dashData)
+    res.status(200).json(dashData[0])
 })
 
 const getTable= asyncHandler(async (req,res)=>{
@@ -53,19 +53,19 @@ const getTable= asyncHandler(async (req,res)=>{
                from: 'rooms',
                localField: "Floor._id",
                foreignField: "Floor_ID",
-               as: "Floor.rooms"
+               as: "rooms"
            }
    
        },
        {
-           $unwind:"$Floor.rooms"
+           $unwind:"$rooms"
        },
        {
            $lookup:{
                from:"checklists",
-               localField:'Floor.rooms._id',
+               localField:'rooms._id',
                foreignField:"Room_ID",
-               as:"Floor.rooms.Micecount"
+               as:"Micecount"
            }
        },
        {
@@ -74,10 +74,13 @@ const getTable= asyncHandler(async (req,res)=>{
                'BuildingID':1,
                "BuildingName":1,
                "Mnemonic":1,
-               "Floor.rooms.RoomNo":1,
-               "Floor.rooms.TrapsInstalled":1,
-               "Floor.rooms.NeedsReplaced":1,
-               "Floor.rooms.totalMice":{$sum:"$Floor.rooms.Micecount.MouseFound"}
+               "rooms._id":1,
+               "rooms.Floor_ID":1,
+               "rooms.RoomNo":1,
+               "rooms.TrapsInstalled":1,
+               "rooms.NeedsReplaced":1,
+               "rooms.Done":1,
+               "totalMice":{$sum:"$Micecount.MouseFound"}
            }
        }
     ])

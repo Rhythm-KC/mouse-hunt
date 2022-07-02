@@ -30,7 +30,7 @@ const getFloors = asyncHandler(async (req,res)=>{
         throw new Error(`No building found with Building ID ${req.params.id}`)
     }
     const floor = await Floor.find({Building_ID: building["_id"]})
-    res.status(200).json({message:floor})
+    res.status(200).json(floor)
 })
 
 //Gets all the Rooms of a Building of particular level

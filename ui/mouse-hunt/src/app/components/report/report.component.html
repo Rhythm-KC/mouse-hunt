@@ -27,18 +27,67 @@
   </div>
   <div calss="row mt-4 row-col-1">
     <div class="col">
-        <table class="table">
-         <thead>
-           <tr>
-            <th scope="col">Building ID</th>
-            <th scope="col">Building Name</th>
-            <th scope="col">Room No</th>
-            <th scope="col">Mouse Found</th>
-            <th scope="col">Traps Installed</th>
+      <div class="card mt-1">
+        <div class="card-title mb-0 mt-1 d-flex align-item-center ">
+          <div class="dropdown ms-1 me-auto">
+            <button class="btn btn-secondary dropdown-toggle" style="width:100px ; white-space:nowrap; overflow:hidden; text-overflow:ellipsis" type="button" id="dropdownMenuButton1"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              {{table[0].BuildingName}}
+            </button>
+            <ul class="dropdown-menu" style="height:300px; overflow:scroll" aria-labelledby="dropdownMenuButton1">
+              <li *ngFor="let building of listOfBuildings"><a class="dropdown-item" (click)="getTable(building.BuildingID)">{{building.BuildingName}}</a></li>
+            </ul>
+          </div>
+          <div class="dropdown me-1">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              sort
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton2">
+              <li *ngFor="let type of filterTypes"><a class="dropdown-item" (click)="filterRoom(type)">{{type}}</a></li>
+            </ul>
+          </div>
+        </div>
 
-          </tr>
-         </thead>
-        </table>
+        <div class="card-body pt-0" style="height:650px; overflow: scroll;">
+          <table class="table" >
+            <thead>
+              <tr>
+                <th scope="col">Building ID</th>
+                <th scope="col">Building Name</th>
+                <th scope="col">Room No</th>
+                <th scope="col">Mouse Found</th>
+                <th scope="col">Traps Installed</th>
+                <th scope="col">Traps to Replace</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let data of table">
+                <td>
+                  {{data.BuildingID}}
+                </td>
+                <td>
+                  {{data.BuildingName}}
+                </td>
+                <td>
+                  {{data.rooms.RoomNo}}
+                </td>
+                <td>
+                  {{data.totalMice}}
+                </td>
+                <td>
+                  {{data.rooms.TrapsInstalled}}
+                </td>
+                <td>
+                  {{data.rooms.NeedsReplaced}}
+                </td>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 

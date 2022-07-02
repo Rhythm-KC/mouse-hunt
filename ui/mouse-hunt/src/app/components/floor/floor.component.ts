@@ -43,7 +43,7 @@ export class FloorComponent implements OnInit {
     Croom["Done"] = true
     console.log(Croom)
     this.loading = true
-    this.floorService.postChecklist(this.bid,Croom,this.mouseFound).subscribe(
+    this.floorService.postChecklist(Croom,this.mouseFound).subscribe(
       (rooms)=> {this.listOFrooms = rooms,
       document.getElementById(`collapse${Croom.RoomNo}`)?.classList.remove('show')
       this.mouseFound = 0

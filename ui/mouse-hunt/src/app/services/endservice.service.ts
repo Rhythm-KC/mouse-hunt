@@ -34,12 +34,12 @@ export class EndserviceService {
   getFloors(buildingID:string|null):Observable<floors[]>{
     const floorsUrl = `${this.url}/buildings/${buildingID}/floors`
     return this.http.get<floors[]>(floorsUrl).pipe(
-      tap(_=> console.log('Got floors')),
+      tap(floors=> console.log(`Got floors ${floors}`)),
       catchError(this.handleError<floors[]>('could not get floors'))
     )
   }
 
-  postChecklist(buildingID:string|null,room:room,mouseFound:number):Observable<room[]>{
+  postChecklist(room:room,mouseFound:number):Observable<room[]>{
     const checklisturl = `${this.url}/building/checklist/`
     let data={
       room:room,
