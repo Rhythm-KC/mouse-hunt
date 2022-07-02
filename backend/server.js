@@ -11,6 +11,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:false}))
 
 app.use("/buildings", require("./routes/buildingRoutes.js"))
+app.use("/analytics", require("./routes/analyticsRouter"))
 
 app.use(errorHandler)
 
