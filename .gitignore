@@ -104,5 +104,6 @@ dist
 .tern-port
 
 #files
-backend/data
+data
+backend/api2
 ui/mouse-hunt/.vscode
