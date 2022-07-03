@@ -18,6 +18,7 @@ app.use((req,res,next)=>{
 
 app.use("/buildings", require("./routes/buildingRoutes.js"))
 app.use("/analytics", require("./routes/analyticsRouter"))
+app.use("/user", require("./routes/userRoutes"))
 
 app.use(errorHandler)
 

@@ -10,13 +10,17 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { MainComponent } from './components/main/main.component';
 import { FloorComponent } from './components/floor/floor.component';
 import { ReportComponent } from './components/report/report.component';
+import { LoginComponent } from './components/login/login.component';
+import { CreateUserComponent } from './components/create-user/create-user.component';
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     MainComponent,
     FloorComponent,
-    ReportComponent
+    ReportComponent,
+    LoginComponent,
+    CreateUserComponent
   ],
   imports: [
     BrowserModule,
