@@ -1,19 +1,46 @@
-<div class="container d-flex">
-<div class="card me-auto">
+<div class="container-fluid d-flex" style="height: 600px;">
+  <div class="card mx-auto my-auto">
 
-  <div class="card-body">
-    <div class="card-title">
-      Login
+    <div class="card-body">
+      <div class="card-title d-flex flex-row ">
+        <h4 class="mx-auto">Login</h4>
+      </div>
+      <form [formGroup]="loginForm">
+        <div class="form-group">
+          <div class="mb-3">
+            <label for="userName" class="form-label">User Name</label>
+            <input type="text" formControlName="userName" class="form-control" id="exampleFormControlInput1"
+              placeholder="bks3423"
+              [ngClass]="{
+                'is-invald': submitted && (this.f['userName'].errors || invalid)
+              }"
+              >
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input formControlName="Password" type="password" class="form-control" id="password" rows="3"
+              [ngClass]="{
+                'is-invald': submitted && (this.f['Password'].errors || invalid)
+              }"
+            >
+          </div>
+
+        </div>
+      </form>
+      <div class="d-grid mx-auto">
+        <button [disabled]="loginForm.pristine || loginForm.invalid"
+        class="btn"
+        [ngClass]="{
+          'btn-success':!loginForm.pristine || !loginForm.invalid,
+          'btn-danger': loginForm.pristine || loginForm.invalid || (submitted && invalid)
+        }"
+
+        (click)="login()">
+          Login
+        </button>
+
+      </div>
+
     </div>
-    <div class="mb-3">
-  <label for="exampleFormControlInput1" class="form-label">User Name</label>
-  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
-</div>
-<div class="mb-3">
-  <label for="exampleFormControlTextarea1" class="form-label">Password</label>
-  <input type="password" class="form-control" id="exampleFormControlTextarea1" rows="3">
-</div>
-
   </div>
-</div>
 </div>
