@@ -1,15 +1,15 @@
 const express = require('express')
 const router = express.Router()
 const {getBuildings, getBuilding,getFloors, getRooms, addChecklist} = require("../controllers/buildingController")
+const {protect} = require("../middleware/authMiddleware")
+router.get("/",protect,getBuildings)
 
-router.get("/",getBuildings)
+router.get("/:id",protect,getBuilding)
 
-router.get("/:id",getBuilding)
+router.get("/:id/floors",protect, getFloors)
 
-router.get("/:id/floors", getFloors)
+router.get("/:id/:level/rooms",protect, getRooms)
 
-router.get("/:id/:level/rooms", getRooms)
-
-router.post('/checklist', addChecklist)
+router.post('/checklist',protect, addChecklist)
 
 module.exports=router

@@ -4,9 +4,9 @@ const User = require("../models/userModel")
 
 const protect = asyncHandler(async(req,res,next)=>{
     let token;
-    if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
+    if(req.cookies.access_token){
         try{
-            token = req.headers.authorization.split(' ')[1]
+            token = req.cookies.access_token
             const decode = jwt.decode(token, process.env.JWT_SECRET)
             req.user = await User.findOne({_id:decode.id, Role:decode.role}).select("-Password")
             next()

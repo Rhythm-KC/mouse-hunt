@@ -17,7 +17,7 @@ export class EndserviceService {
 
   getAllBuilding():Observable<Building[]>{
     const buildingurl = `${this.url}/buildings`
-    return this.http.get<Building[]>(buildingurl).pipe(
+    return this.http.get<Building[]>(buildingurl,{withCredentials:true}).pipe(
       tap(()=> EndserviceService.log('Getting course')),
       catchError(this.handleError<Building[]>('could not buildings'))
     )
@@ -25,7 +25,7 @@ export class EndserviceService {
 
   getRooms(buildingID:string|null, level:string|null):Observable<room[]>{
       const floorurl = `${this.url}/buildings/${buildingID}/${level}/rooms`
-      return this.http.get<room[]>(floorurl).pipe(
+      return this.http.get<room[]>(floorurl,{withCredentials:true}).pipe(
         tap((floor)=> EndserviceService.log('got floors')),
         catchError(this.handleError<room[]>('could not get floor'))
       )
@@ -33,7 +33,7 @@ export class EndserviceService {
 
   getFloors(buildingID:string|null):Observable<floors[]>{
     const floorsUrl = `${this.url}/buildings/${buildingID}/floors`
-    return this.http.get<floors[]>(floorsUrl).pipe(
+    return this.http.get<floors[]>(floorsUrl,{withCredentials:true}).pipe(
       tap(floors=> console.log(`Got floors ${floors}`)),
       catchError(this.handleError<floors[]>('could not get floors'))
     )
@@ -45,7 +45,7 @@ export class EndserviceService {
       room:room,
       mice:mouseFound
     }
-    return this.http.post<room[]>(checklisturl,data).pipe(
+    return this.http.post<room[]>(checklisturl,data,{withCredentials:true}).pipe(
       tap(_=>(console.log("submited room"))),
       catchError(this.handleError<room[]>("room info was not submitted"))
     )
