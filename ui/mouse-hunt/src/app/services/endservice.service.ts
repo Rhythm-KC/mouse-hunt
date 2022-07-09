@@ -34,7 +34,7 @@ export class EndserviceService {
   getFloors(buildingID:string|null):Observable<floors[]>{
     const floorsUrl = `${this.url}/buildings/${buildingID}/floors`
     return this.http.get<floors[]>(floorsUrl,{withCredentials:true}).pipe(
-      tap(floors=> console.log(`Got floors ${floors}`)),
+      tap(floors=> console.log(`Got floors`)),
       catchError(this.handleError<floors[]>('could not get floors'))
     )
   }
