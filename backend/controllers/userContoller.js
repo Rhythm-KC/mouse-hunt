@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const asyncHandler = require("express-async-handler");
+const mongoose  = require("mongoose");
 
 const createUser = asyncHandler(async (req, res) => {
   const { userName, Password, Role } = req.body;
@@ -57,13 +58,14 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-const verifyToken = (req, res) => {
+const verifyToken = asyncHandler(async (req, res) => {
   let token;
   if (req.cookies.access_token) {
     try {
       token = req.cookies.access_token;
-      jwt.verify(token, process.env.JWT_SECRET);
-      res.status(200).json({ id: token.id, Role: token.role });
+      const user = jwt.verify(token, process.env.JWT_SECRET);
+      console.log(user)
+      res.status(200).json({ _id: user.id, userName:"", Role: user.role });
     } catch (err) {
       res.status(401);
       throw new Error("could not verify, Token has expired");
@@ -73,7 +75,7 @@ const verifyToken = (req, res) => {
     res.status(401);
     throw new Error("could not verify token");
   }
-};
+});
 
 const logout = (req,res)=>{
   console.log("here")

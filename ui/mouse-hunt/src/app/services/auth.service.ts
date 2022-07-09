@@ -7,26 +7,20 @@ import { User } from '../models/User';
 })
 export class AuthService {
   private userUrl: string
-  currentUser!: Subject<User | null>
-  loggedIn!: BehaviorSubject<boolean>
+  loggedIn!: Subject<boolean>
+  currentUser:Subject<User|null>
 
   constructor(private http: HttpClient) {
     this.userUrl = "http://localhost:3000/user"
+    this.loggedIn = new Subject<boolean>()
     this.currentUser= new Subject<User|null>()
-    this.loggedIn = new BehaviorSubject<boolean>(false)
-    this.verifyUser().subscribe({
-      next: () => this.loggedIn.next(true),
-      error: () => this.loggedIn.next(false)
-    }
-    )
   }
 
-  getAuthUser():Observable<User|null>{
-    return this.currentUser.asObservable()
+  getLoginStatus():Observable<boolean>{
+    return this.loggedIn.asObservable()
   }
 
-
-  loginUser(userName: string, password: string): BehaviorSubject<boolean> {
+  loginUser(userName: string, password: string): Observable<boolean> {
     const loginUrl = `${this.userUrl}/login`
     const userJson = { userName: userName, Password: password }
     this.http.post<User>(loginUrl, userJson, { withCredentials: true }).subscribe(
@@ -36,24 +30,23 @@ export class AuthService {
           this.currentUser.next(res)
         },
         error:()=>{ this.loggedIn.next(false)
-          this.currentUser.next(null)
         }
 
       }
     )
-    return this.loggedIn
+    return this.loggedIn.asObservable()
   }
 
   verifyUser() {
     const verifyUrl = `${this.userUrl}/verify`
-    console.log(verifyUrl)
-    return this.http.get<boolean>(verifyUrl, { withCredentials: true })
+    return this.http.get<User>(verifyUrl, { withCredentials: true })
   }
 
   logout() {
     const logoutUrl = `${this.userUrl}/logout`
     this.http.get<boolean>(logoutUrl,{withCredentials:true}).subscribe(
-      {next:(res)=> this.loggedIn.next(res),
+      {next:(res)=> {this.loggedIn.next(res), this.currentUser.next(null)},
+
         error:()=> {console.log("couldnot logout")
           this.loggedIn.next(true)
         }

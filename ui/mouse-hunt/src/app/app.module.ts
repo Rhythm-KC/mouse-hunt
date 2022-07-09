@@ -11,7 +11,7 @@ import { MainComponent } from './components/main/main.component';
 import { FloorComponent } from './components/floor/floor.component';
 import { ReportComponent } from './components/report/report.component';
 import { LoginComponent } from './components/login/login.component';
-import { CreateUserComponent } from './components/create-user/create-user.component';
+import { SignupComponent } from './signup/signup.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -20,7 +20,7 @@ import { CreateUserComponent } from './components/create-user/create-user.compon
     FloorComponent,
     ReportComponent,
     LoginComponent,
-    CreateUserComponent
+    SignupComponent
   ],
   imports: [
     BrowserModule,
