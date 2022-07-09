@@ -1,0 +1,45 @@
+<div class="container-fluid d-flex" style="height: 600px;">
+  <div class="card mx-auto my-auto">
+
+    <div class="card-body">
+      <div class="card-title d-flex flex-row ">
+        <h4 class="mx-auto">Create User</h4>
+      </div>
+      <form [formGroup]="signupForm">
+        <div class="form-group">
+          <div class="mb-3">
+            <label for="userName" class="form-label">User Name</label>
+            <input type="text" formControlName="userName" class="form-control" id="exampleFormControlInput1"
+              placeholder="bks3423" [ngClass]="{
+                'is-invald': submitted && (this.f['userName'].errors || invalid)
+              }">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input formControlName="password" type="password" class="form-control" id="password" rows="3" [ngClass]="{
+                'is-invald': submitted && (this.f['Password'].errors || invalid)
+              }">
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">Role</label>
+            <select formControlName="Role" class="form-control" row="3">
+              <option *ngFor="let option of role">{{option}}</option>
+            </select>
+          </div>
+
+
+        </div>
+      </form>
+      <div class="d-grid mx-auto">
+        <button [disabled]="signupForm.pristine || signupForm.invalid" class="btn" [ngClass]="{
+          'btn-success':!signupForm.pristine || !signupForm.invalid,
+          'btn-danger': signupForm.pristine || signupForm.invalid || (submitted && invalid)
+        }" (click)="createUser()">
+         Create new user
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
