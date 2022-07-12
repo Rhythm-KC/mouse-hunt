@@ -11,7 +11,7 @@ import { MainComponent } from './components/main/main.component';
 import { FloorComponent } from './components/floor/floor.component';
 import { ReportComponent } from './components/report/report.component';
 import { LoginComponent } from './components/login/login.component';
-import { SignupComponent } from './signup/signup.component';
+import { SignupComponent } from './components/signup/signup.component';
 @NgModule({
   declarations: [
     AppComponent,

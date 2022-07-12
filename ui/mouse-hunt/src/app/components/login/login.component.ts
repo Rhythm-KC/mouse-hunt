@@ -33,7 +33,8 @@ export class LoginComponent implements OnInit {
       {
         next:()=>{
           console.log("redirect home")
-          this.router.navigate(["/home"])
+          this.router.navigate(['/home'])
+          
         },
         error:()=>{
           this.invalid = true

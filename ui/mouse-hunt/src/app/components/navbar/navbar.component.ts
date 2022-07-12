@@ -15,11 +15,15 @@ export class NavbarComponent implements OnInit {
   constructor(private auth:AuthService, private router:Router) {
     this.Admin ="Admin"
     this.auth.getLoginStatus().subscribe(
-      res=>this.loggedIn = res
+      res=>{this.loggedIn = res
+        console.log(res)
+      }
+
     )
    }
 
   ngOnInit(): void {
+
   }
   logout(){
     this.auth.logout()

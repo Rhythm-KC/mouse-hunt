@@ -7,6 +7,7 @@ import { floors } from '../models/floors';
 import { room } from '../models/rooms';
 import { Dashboard } from '../models/Dashboard';
 import { Table } from '../models/Table';
+import { User } from '../models/User';
 
 @Injectable({
   providedIn: 'root'
@@ -70,6 +71,11 @@ export class EndserviceService {
     )
   }
 
+  createUser(userName:string, password:string, role:string):Observable<User>{
+    const signinurl = `${this.url}/user/creatUser`
+
+    return this.http.post<User>(signinurl,{userName:userName,Password:password,Role:role},{withCredentials:true})
+  }
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
     // TODO: send the error to remote logging infrastructure

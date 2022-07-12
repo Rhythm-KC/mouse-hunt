@@ -64,7 +64,6 @@ const verifyToken = asyncHandler(async (req, res) => {
     try {
       token = req.cookies.access_token;
       const user = jwt.verify(token, process.env.JWT_SECRET);
-      console.log(user)
       res.status(200).json({ _id: user.id, userName:"", Role: user.role });
     } catch (err) {
       res.status(401);
